@@ -25,8 +25,7 @@ public class Handler implements RequestHandler<SNSEvent, String> {
         for (SNSEvent.SNSRecord record : event.getRecords()) {
             String message = record.getSNS().getMessage();
             ObservationEvent observationEvent = Json.parse(message, ObservationEvent.class);
-            System.out.println("Observations: " + observationEvent.getObservations());
-            System.out.println("Date: " + observationEvent.getDate());
+            System.out.println("Observations: " + observationEvent);
         }
         return "Success";
     }
