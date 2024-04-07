@@ -1,6 +1,7 @@
 package eu.luminis.debugging.report;
 
 import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.SNSEvent;
 import eu.luminis.debugging.report.model.ObservationEvent;
@@ -22,6 +23,11 @@ public class Handler implements RequestHandler<SNSEvent, String> {
 
     @Override
     public String handleRequest(SNSEvent event, Context context) {
+        LambdaLogger logger = context.getLogger();
+        logger.log("ENVIRONMENT VARIABLES: " + Json.format(System.getenv()));
+        logger.log("CONTEXT: " + Json.format(context));
+        logger.log("EVENT: " + Json.format(event));
+
         for (SNSEvent.SNSRecord record : event.getRecords()) {
             String message = record.getSNS().getMessage();
             ObservationEvent observationEvent = Json.parse(message, ObservationEvent.class);
