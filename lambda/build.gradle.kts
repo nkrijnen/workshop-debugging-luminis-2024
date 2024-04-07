@@ -6,6 +6,7 @@ plugins {
 
 dependencies {
     implementation(platform("software.amazon.awssdk:bom:2.25.24"))
+    implementation("software.amazon.awssdk:aws-crt-client")
     implementation("software.amazon.awssdk:dynamodb")
     implementation("software.amazon.awssdk:s3")
 
@@ -18,6 +19,6 @@ application {
 }
 
 tasks.shadowJar {
-    mergeServiceFiles()
-    minimize()
+//    mergeServiceFiles()
+//    minimize()
 }
