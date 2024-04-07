@@ -7,7 +7,6 @@ import software.amazon.awscdk.services.lambda.Code;
 import software.amazon.awscdk.services.lambda.Function;
 import software.amazon.awscdk.services.lambda.FunctionProps;
 import software.amazon.awscdk.services.lambda.Runtime;
-import software.amazon.awscdk.services.sns.ITopic;
 import software.amazon.awscdk.services.sns.Subscription;
 import software.amazon.awscdk.services.sns.SubscriptionProtocol;
 import software.amazon.awscdk.services.sns.Topic;
@@ -30,10 +29,8 @@ public class LambdaStack extends Stack {
                         .code(Code.fromAsset(jarPath))
                         .build());
 
-        ITopic topic = Topic.fromTopicArn(this, "topic", topicArn);
-
-        Subscription.Builder.create(this, "DebuggingLikeAPro")
-                .topic(topic)
+        Subscription.Builder.create(this, "Subscription")
+                .topic(Topic.fromTopicArn(this, "Topic", topicArn))
                 .protocol(SubscriptionProtocol.LAMBDA)
                 .endpoint(weatherStationLambda.getFunctionArn())
                 .build();
