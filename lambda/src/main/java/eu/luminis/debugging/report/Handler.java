@@ -7,7 +7,6 @@ import software.amazon.awssdk.http.crt.AwsCrtHttpClient;
 import software.amazon.awssdk.services.s3.S3Client;
 
 import java.time.Duration;
-import java.util.List;
 
 @SuppressWarnings("unused")
 public class Handler implements RequestHandler<SNSEvent, String> {
@@ -21,15 +20,12 @@ public class Handler implements RequestHandler<SNSEvent, String> {
 
     @Override
     public String handleRequest(SNSEvent event, Context context) {
-        List<String> messages = event.getRecords().stream()
-                .map(SNSEvent.SNSRecord::getEventSource).toList();
-
-        messages.forEach(message ->
-                System.out.println(message)
-        );
-
-//        s3.putObject()
-
-        return "ok";
+        for (SNSEvent.SNSRecord record : event.getRecords()) {
+            String message = record.getSNS().getMessage();
+            ObservationEvent observationEvent = Json.parse(message, ObservationEvent.class);
+            System.out.println("Observations: " + observationEvent.getObservations());
+            System.out.println("Date: " + observationEvent.getDate());
+        }
+        return "Success";
     }
 }
