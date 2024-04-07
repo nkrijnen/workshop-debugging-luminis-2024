@@ -1,4 +1,4 @@
-package eu.luminis.debugging.report;
+package eu.luminis.debugging.report.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

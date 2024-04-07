@@ -1,4 +1,4 @@
-package eu.luminis.debugging.report;
+package eu.luminis.debugging.report.model;
 
 public final class Observation {
     private final String station;

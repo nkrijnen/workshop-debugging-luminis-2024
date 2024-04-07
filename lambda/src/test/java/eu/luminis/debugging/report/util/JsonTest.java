@@ -1,5 +1,7 @@
-package eu.luminis.debugging.report;
+package eu.luminis.debugging.report.util;
 
+import eu.luminis.debugging.report.model.Observation;
+import eu.luminis.debugging.report.model.ObservationEvent;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

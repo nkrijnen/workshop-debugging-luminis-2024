@@ -1,4 +1,4 @@
-package eu.luminis.debugging.report;
+package eu.luminis.debugging.report.model;
 
 import java.time.LocalDateTime;
 import java.util.List;

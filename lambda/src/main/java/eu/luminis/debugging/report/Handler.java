@@ -3,6 +3,8 @@ package eu.luminis.debugging.report;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.SNSEvent;
+import eu.luminis.debugging.report.model.ObservationEvent;
+import eu.luminis.debugging.report.util.Json;
 import software.amazon.awssdk.http.crt.AwsCrtHttpClient;
 import software.amazon.awssdk.services.s3.S3Client;
 
