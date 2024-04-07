@@ -10,7 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JsonTest {
-    ObservationEvent event = new ObservationEvent(
+    ObservationEvent sampleEvent = new ObservationEvent(
             List.of(
                     new Observation("Bla", 10, 50)
             ),
@@ -20,7 +20,7 @@ class JsonTest {
     @Test
     void format() {
 
-        String json = Json.format(event);
+        String json = Json.format(sampleEvent);
 
         assertEquals("{\"observations\":[{\"station\":\"Bla\",\"temperature\":10.0,\"humidity\":50.0}],\"date\":[2024,4,8,13,54,32]}", json);
     }
@@ -31,6 +31,6 @@ class JsonTest {
 
         ObservationEvent event = Json.parse(json, ObservationEvent.class);
 
-        assertEquals(event, event);
+        assertEquals(sampleEvent, event);
     }
 }

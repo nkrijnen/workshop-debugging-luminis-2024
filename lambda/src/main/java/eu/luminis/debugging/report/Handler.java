@@ -14,7 +14,7 @@ import java.time.Duration;
 @SuppressWarnings("unused")
 public class Handler implements RequestHandler<SNSEvent, String> {
 
-    private S3Client s3 = S3Client.builder()
+    private final S3Client s3 = S3Client.builder()
             .httpClientBuilder(AwsCrtHttpClient.builder()
                     .connectionTimeout(Duration.ofSeconds(3))
                     .maxConcurrency(100)
