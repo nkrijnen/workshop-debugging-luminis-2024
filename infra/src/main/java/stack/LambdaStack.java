@@ -1,5 +1,6 @@
 package stack;
 
+import software.amazon.awscdk.Duration;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.iam.Role;
@@ -7,6 +8,7 @@ import software.amazon.awscdk.services.lambda.Code;
 import software.amazon.awscdk.services.lambda.Function;
 import software.amazon.awscdk.services.lambda.FunctionProps;
 import software.amazon.awscdk.services.lambda.Runtime;
+import software.amazon.awscdk.services.logs.RetentionDays;
 import software.amazon.awscdk.services.sns.Subscription;
 import software.amazon.awscdk.services.sns.SubscriptionProtocol;
 import software.amazon.awscdk.services.sns.Topic;
@@ -24,6 +26,9 @@ public class LambdaStack extends Stack {
         Function weatherStationLambda = new Function(this, "Lambda",
                 FunctionProps.builder()
                         .role(Role.fromRoleName(this, "LambdaRole", roleName))
+                        .memorySize(1024)
+                        .timeout(Duration.seconds(20))
+                        .logRetention(RetentionDays.ONE_WEEK)
                         .runtime(Runtime.JAVA_17)
                         .handler(handlerClass)
                         .code(Code.fromAsset(jarPath))
