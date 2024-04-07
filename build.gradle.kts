@@ -1,9 +1,12 @@
-import org.gradle.api.tasks.compile.JavaCompile
+group = "eu.luminis.debugging"
+version = "1.0-SNAPSHOT"
 
 allprojects {
     repositories {
         mavenCentral()
     }
+    group = rootProject.group
+    version = rootProject.version
 }
 
 subprojects {
