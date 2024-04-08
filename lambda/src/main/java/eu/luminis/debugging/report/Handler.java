@@ -72,8 +72,8 @@ public class Handler implements RequestHandler<SNSEvent, String> {
                 }
 
                 out.append("<tr><td>" + observation.station() + "</td>" +
-                        "<td><img src=\"" + condition.getImageUri() + "\" alt=\"" + condition + "\"></td>" +
-                        "<td><a href=\"" + "https://earth.google.com/web/@" + station.latitude() + "," + station.longitude() + "\">show map</a></td></tr>\n");
+                        "<td>" + condition.getImageEmoji() + "</td>" +
+                        "<td><a href=\"" + "https://earth.google.com/web/@" + station.latitude() + "," + station.longitude() + "\" target=\"_blank\">show map</a></td></tr>\n");
             }
             out.append("</table>");
         } catch (Exception ignored) {

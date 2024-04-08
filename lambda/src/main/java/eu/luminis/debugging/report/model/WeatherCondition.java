@@ -1,10 +1,10 @@
 package eu.luminis.debugging.report.model;
 
 public enum WeatherCondition {
-    SUNNY("sunny.png"),
-    CLOUDY("cloudy.png"),
-    POURING("pouring.png"),
-    SNOW("snow.png");
+    SUNNY("☀️"),
+    CLOUDY("☁️"),
+    POURING("🌧️"),
+    SNOW("❄️");
 
     private final String imageUri;
 
@@ -17,7 +17,7 @@ public enum WeatherCondition {
         return super.toString().toLowerCase();
     }
 
-    public String getImageUri() {
+    public String getImageEmoji() {
         return imageUri;
     }
 }
