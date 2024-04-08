@@ -4,10 +4,8 @@ import software.amazon.awscdk.Duration;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.iam.Role;
-import software.amazon.awscdk.services.lambda.Code;
-import software.amazon.awscdk.services.lambda.Function;
-import software.amazon.awscdk.services.lambda.FunctionProps;
 import software.amazon.awscdk.services.lambda.Runtime;
+import software.amazon.awscdk.services.lambda.*;
 import software.amazon.awscdk.services.logs.RetentionDays;
 import software.amazon.awscdk.services.sns.Subscription;
 import software.amazon.awscdk.services.sns.SubscriptionProtocol;
@@ -20,6 +18,7 @@ public class LambdaStack extends Stack {
 
         String jarPath = "../lambda/build/libs/lambda-1.0-SNAPSHOT-all.jar";
         String handlerClass = "eu.luminis.debugging.report.Handler";
+
         String topicArn = "arn:aws:sns:eu-west-1:998150297714:debugging-like-a-pro_weather-observations";
         String roleName = "DebuggingLikeAProLambdaRole";
 
@@ -33,6 +32,13 @@ public class LambdaStack extends Stack {
                         .handler(handlerClass)
                         .code(Code.fromAsset(jarPath))
                         .build());
+
+        CfnPermission.Builder.create(this, "SNSToLambda")
+                .action("lambda:InvokeFunction")
+                .principal("sns.amazonaws.com")
+                .functionName(weatherStationLambda.getFunctionArn())
+                .sourceArn(topicArn)
+                .build();
 
         Subscription.Builder.create(this, "Subscription")
                 .topic(Topic.fromTopicArn(this, "Topic", topicArn))
