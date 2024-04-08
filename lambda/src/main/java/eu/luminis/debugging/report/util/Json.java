@@ -1,31 +1,39 @@
 package eu.luminis.debugging.report.util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Json {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    static {
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.registerModule(new ParameterNamesModule());
-    }
+    private static final Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter()).create();
 
     public static <T> T parse(String content, Class<T> valueType) {
-        try {
-            return objectMapper.readValue(content, valueType);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        return gson.fromJson(content, valueType);
     }
 
     public static String format(Object content) {
-        try {
-            return objectMapper.writeValueAsString(content);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+        return gson.toJson(content);
+    }
+
+    private static class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
+        private final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
+        @Override
+        public void write(JsonWriter out, LocalDateTime value) throws IOException {
+            out.value(value.format(formatter));
+        }
+
+        @Override
+        public LocalDateTime read(JsonReader in) throws IOException {
+            return LocalDateTime.parse(in.nextString(), formatter);
         }
     }
+
 }

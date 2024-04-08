@@ -22,12 +22,12 @@ class JsonTest {
 
         String json = Json.format(sampleEvent);
 
-        assertEquals("{\"observations\":[{\"station\":\"Bla\",\"temperature\":10.0,\"humidity\":50.0}],\"date\":[2024,4,8,13,54,32]}", json);
+        assertEquals("{\"observations\":[{\"station\":\"Bla\",\"temperature\":10.0,\"humidity\":50.0}],\"date\":\"2024-04-08T13:54:32\"}", json);
     }
 
     @Test
     void parse() {
-        String json = "{\"observations\":[{\"station\":\"Bla\",\"temperature\":10.0,\"humidity\":50.0}],\"date\":[2024,4,8,13,54,32]}";
+        String json = "{\"observations\":[{\"station\":\"Bla\",\"temperature\":10.0,\"humidity\":50.0}],\"date\":\"2024-04-08T13:54:32\"}";
 
         ObservationEvent event = Json.parse(json, ObservationEvent.class);
 
