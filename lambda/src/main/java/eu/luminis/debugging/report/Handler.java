@@ -90,6 +90,7 @@ public class Handler implements RequestHandler<SNSEvent, String> {
                 .contentType("text/html; charset=utf-8")
                 .build();
         s3.putObject(request, RequestBody.fromBytes(bytes));
+        logger.log("Weather report updated ➡️ http://debugging-like-a-pro.weather-reports.s3-website-eu-west-1.amazonaws.com/" + key);
 
         return "Success";
     }
