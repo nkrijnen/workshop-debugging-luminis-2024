@@ -49,7 +49,7 @@ public class Handler implements RequestHandler<SNSEvent, String> {
     @Override
     public String handleRequest(SNSEvent event, Context context) {
         var logger = context.getLogger();
-        logger.log("EVENT: " + Json.format(event));
+//        logger.log("EVENT: " + Json.format(event));
 
         if (event.getRecords().isEmpty()) {
             return "Success";
@@ -106,7 +106,6 @@ public class Handler implements RequestHandler<SNSEvent, String> {
                 .build();
         s3.putObject(request, RequestBody.fromBytes(bytes));
         logger.log("Weather report updated ➡️ http://debugging-like-a-pro.weather-reports.s3-website-eu-west-1.amazonaws.com/" + key);
-
 
         return "Success";
     }
