@@ -1,15 +1,22 @@
 package eu.luminis.debugging.report;
 
 import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.SNSEvent;
 import eu.luminis.debugging.report.model.ObservationEvent;
+import eu.luminis.debugging.report.model.WeatherCondition;
+import eu.luminis.debugging.report.model.WeatherStation;
 import eu.luminis.debugging.report.util.Json;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.http.crt.AwsCrtHttpClient;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.time.Duration;
+
+import static eu.luminis.debugging.report.model.WeatherStation.stations;
 
 @SuppressWarnings("unused")
 public class Handler implements RequestHandler<SNSEvent, String> {
@@ -23,16 +30,58 @@ public class Handler implements RequestHandler<SNSEvent, String> {
 
     @Override
     public String handleRequest(SNSEvent event, Context context) {
-        LambdaLogger logger = context.getLogger();
-        logger.log("ENVIRONMENT VARIABLES: " + Json.format(System.getenv()));
-        logger.log("CONTEXT: " + Json.format(context));
+        var logger = context.getLogger();
         logger.log("EVENT: " + Json.format(event));
 
-        for (SNSEvent.SNSRecord record : event.getRecords()) {
-            String message = record.getSNS().getMessage();
-            ObservationEvent observationEvent = Json.parse(message, ObservationEvent.class);
-            System.out.println("Observations: " + observationEvent);
+        if (event.getRecords().isEmpty()) {
+            return "Success";
         }
+        var lastRecord = event.getRecords().get(event.getRecords().size());
+        var message = lastRecord.getSNS().getMessage();
+        var observationEvent = Json.parse(message, ObservationEvent.class);
+
+        logger.log("Observations: " + observationEvent);
+
+        ByteArrayOutputStream bout = new ByteArrayOutputStream();
+        PrintStream out = new PrintStream(bout);
+        try {
+            out.append("<table>\n");
+            out.append("<tr><th>Station</th><th>Weather Condition</th><th></th></tr>\n");
+            for (WeatherStation station : stations) {
+                var observation = observationEvent.observations().stream().filter(o -> o.station().equals(station.name())).findAny().orElse(null);
+
+                WeatherCondition condition;
+                if (observation.temperature() > 10 && observation.humidity() < 0.5) {
+                    condition = WeatherCondition.SUNNY;
+                } else if (observation.temperature() > 10 && observation.humidity() >= 0.5) {
+                    condition = WeatherCondition.CLOUDY;
+                } else if (observation.temperature() < 10 && observation.humidity() > 0.8) {
+                    condition = WeatherCondition.POURING;
+                } else if (observation.temperature() < 0) {
+                    condition = WeatherCondition.SNOW;
+                } else {
+                    condition = null;
+                }
+
+                // https://earth.google.com/web/@<lat>,<lng>
+                out.append("<tr><td>" + observation.station() + "</td>" +
+                        "<td><img src=\"" + condition.getImageUri() + "\" alt=\"" + condition + "\"></td>" +
+                        "<td><a href=\"" + "https://maps.google.com/?q=" + station.latitude() + "," + station.longitude() + "\">show map</a></td></tr>\n");
+            }
+            out.append("</table>");
+        } catch (Exception ignored) {
+        }
+
+        byte[] bytes = bout.toByteArray();
+        PutObjectRequest request = PutObjectRequest.builder()
+                .bucket("")
+                .key("")
+                .cacheControl("no-store")
+                .contentLength((long) bytes.length)
+                .build();
+        s3.putObject(request, RequestBody.fromBytes(bytes));
+
         return "Success";
     }
+
 }
