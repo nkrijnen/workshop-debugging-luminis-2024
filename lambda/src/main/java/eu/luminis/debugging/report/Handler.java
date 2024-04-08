@@ -29,10 +29,8 @@ public class Handler implements RequestHandler<SNSEvent, String> {
     private final S3Client s3 = S3Client.builder()
             .region(Region.EU_WEST_1)
             .httpClientBuilder(AwsCrtHttpClient.builder()
-                            .connectionTimeout(Duration.ofSeconds(3))
-                            .maxConcurrency(100)
-//            ).credentialsProvider(
-//                    ProfileCredentialsProvider.builder().profileName("AWSAdministratorAccess-998150297714").build()
+                    .connectionTimeout(Duration.ofSeconds(3))
+                    .maxConcurrency(100)
             )
             .build();
 
