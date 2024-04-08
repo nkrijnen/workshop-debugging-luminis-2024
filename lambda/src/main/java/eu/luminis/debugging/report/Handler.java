@@ -6,10 +6,13 @@ import com.amazonaws.services.lambda.runtime.events.SNSEvent;
 import eu.luminis.debugging.report.model.ObservationEvent;
 import eu.luminis.debugging.report.model.WeatherCondition;
 import eu.luminis.debugging.report.model.WeatherStation;
+import eu.luminis.debugging.report.model.ProducerWeatherStation;
 import eu.luminis.debugging.report.util.Json;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.http.crt.AwsCrtHttpClient;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import software.amazon.awssdk.services.dynamodb.model.*;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -18,6 +21,9 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Objects;
+import java.util.List;
+
+import static java.lang.Double.parseDouble;
 
 import static eu.luminis.debugging.report.model.WeatherStation.stations;
 
@@ -53,6 +59,9 @@ public class Handler implements RequestHandler<SNSEvent, String> {
         try {
             out.append("<table>\n");
             out.append("<tr><th>Station</th><th>Weather Condition</th><th></th></tr>\n");
+
+	        List<ProducerWeatherStation> weatherStations = getWeatherStationInfo();
+
             for (WeatherStation station : stations) {
                 var observation = observationEvent.observations().stream().filter(o -> o.station().equals(station.name())).findAny().orElse(null);
 
@@ -90,7 +99,22 @@ public class Handler implements RequestHandler<SNSEvent, String> {
         s3.putObject(request, RequestBody.fromBytes(bytes));
         logger.log("Weather report updated ➡️ http://debugging-like-a-pro.weather-reports.s3-website-eu-west-1.amazonaws.com/" + key);
 
+
+
         return "Success";
     }
 
+
+    private List<ProducerWeatherStation> getWeatherStationInfo() {
+        ScanResponse scanResponse;
+        try (DynamoDbClient dbClient = DynamoDbClient.builder().build()) {
+
+            scanResponse = dbClient
+                    .scan(ScanRequest.builder().tableName("debugging-like-a-pro.weather-stations").build());
+        }
+
+        return scanResponse.items().stream()
+                .map(dynamoItem -> new ProducerWeatherStation(dynamoItem.get("WeatherStation").s(), parseDouble(dynamoItem.get("lat").s()), parseDouble(dynamoItem.get("long").s())))
+                .toList();
+    }
 }
