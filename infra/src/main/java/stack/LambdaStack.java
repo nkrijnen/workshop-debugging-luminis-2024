@@ -12,8 +12,10 @@ import software.amazon.awscdk.services.sns.SubscriptionProtocol;
 import software.amazon.awscdk.services.sns.Topic;
 import software.constructs.Construct;
 
+import java.util.Map;
+
 public class LambdaStack extends Stack {
-    public LambdaStack(final Construct scope, final String id, final StackProps props) {
+    public LambdaStack(final Construct scope, final String id, final StackProps props, final String userName) {
         super(scope, id, props);
 
         String jarPath = "../lambda/build/libs/lambda-1.0-SNAPSHOT-all.jar";
@@ -31,6 +33,9 @@ public class LambdaStack extends Stack {
                         .runtime(Runtime.JAVA_17)
                         .handler(handlerClass)
                         .code(Code.fromAsset(jarPath))
+                        .environment(Map.of(
+                                "BUCKET_PREFIX", userName
+                        ))
                         .build());
 
         CfnPermission.Builder.create(this, "SNSToLambda")

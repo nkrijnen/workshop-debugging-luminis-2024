@@ -7,7 +7,8 @@ public class LambdaApp {
     public static void main(final String[] args) {
 
         App app = new App();
-        new LambdaStack(app, "DebuggingLikeAPro-" + getOsUserName(), StackProps.builder().build());
+        String userName = getOsUserName();
+        new LambdaStack(app, "DebuggingLikeAPro-" + userName, StackProps.builder().build(), userName);
         app.synth();
     }
 

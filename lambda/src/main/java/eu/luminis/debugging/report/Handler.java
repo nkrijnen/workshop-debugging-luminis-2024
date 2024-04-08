@@ -21,6 +21,8 @@ import static eu.luminis.debugging.report.model.WeatherStation.stations;
 @SuppressWarnings("unused")
 public class Handler implements RequestHandler<SNSEvent, String> {
 
+    private final String bucketPrefix = System.getenv().get("BUCKET_PREFIX");
+
     private final S3Client s3 = S3Client.builder()
             .httpClientBuilder(AwsCrtHttpClient.builder()
                     .connectionTimeout(Duration.ofSeconds(3))
@@ -73,8 +75,8 @@ public class Handler implements RequestHandler<SNSEvent, String> {
 
         byte[] bytes = bout.toByteArray();
         PutObjectRequest request = PutObjectRequest.builder()
-                .bucket("")
-                .key("")
+                .bucket("debugging-like-a-pro.weather-reports")
+                .key(bucketPrefix)
                 .cacheControl("no-store")
                 .contentLength((long) bytes.length)
                 .build();
