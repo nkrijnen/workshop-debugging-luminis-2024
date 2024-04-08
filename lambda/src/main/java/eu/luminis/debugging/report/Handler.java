@@ -9,24 +9,30 @@ import eu.luminis.debugging.report.model.WeatherStation;
 import eu.luminis.debugging.report.util.Json;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.http.crt.AwsCrtHttpClient;
+import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Objects;
 
 import static eu.luminis.debugging.report.model.WeatherStation.stations;
 
 @SuppressWarnings("unused")
 public class Handler implements RequestHandler<SNSEvent, String> {
 
-    private final String bucketPrefix = System.getenv().get("BUCKET_PREFIX");
+    private final String bucketPrefix = Objects.toString(System.getenv().get("BUCKET_PREFIX"), System.getenv().get("USER"));
 
     private final S3Client s3 = S3Client.builder()
+            .region(Region.EU_WEST_1)
             .httpClientBuilder(AwsCrtHttpClient.builder()
-                    .connectionTimeout(Duration.ofSeconds(3))
-                    .maxConcurrency(100)
+                            .connectionTimeout(Duration.ofSeconds(3))
+                            .maxConcurrency(100)
+//            ).credentialsProvider(
+//                    ProfileCredentialsProvider.builder().profileName("AWSAdministratorAccess-998150297714").build()
             )
             .build();
 
@@ -45,7 +51,7 @@ public class Handler implements RequestHandler<SNSEvent, String> {
         logger.log("Observations: " + observationEvent);
 
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        PrintStream out = new PrintStream(bout);
+        PrintStream out = new PrintStream(bout, true, StandardCharsets.UTF_8);
         try {
             out.append("<table>\n");
             out.append("<tr><th>Station</th><th>Weather Condition</th><th></th></tr>\n");
@@ -71,14 +77,17 @@ public class Handler implements RequestHandler<SNSEvent, String> {
             }
             out.append("</table>");
         } catch (Exception ignored) {
+            out.append("<tr><td>ERROR</td></tr>\n");
         }
 
         byte[] bytes = bout.toByteArray();
+        String key = bucketPrefix + "/index.html";
         PutObjectRequest request = PutObjectRequest.builder()
                 .bucket("debugging-like-a-pro.weather-reports")
-                .key(bucketPrefix)
+                .key(key)
                 .cacheControl("no-store")
                 .contentLength((long) bytes.length)
+                .contentType("text/html; charset=utf-8")
                 .build();
         s3.putObject(request, RequestBody.fromBytes(bytes));
 
