@@ -70,8 +70,8 @@ public class Handler implements RequestHandler<SNSEvent, String> {
             List<WeatherStation> weatherStations = scanResponse.items().stream()
                     .map(dynamoItem -> new WeatherStation(dynamoItem.get("WeatherStation").s(), parseDouble(dynamoItem.get("lat").s()), parseDouble(dynamoItem.get("long").s()), dynamoItem.get("historicTemperatureData").s()))
                     .toList();
-            for (WeatherStation station : weatherStations) {
-//            for (WeatherStation station : WeatherStation.stations) {
+//            for (WeatherStation station : weatherStations) {
+            for (WeatherStation station : WeatherStation.stations) {
                 var observation = observationEvent.observations().stream().filter(o -> o.station().equals(station.name())).findAny().orElse(null);
 
                 WeatherCondition condition;
