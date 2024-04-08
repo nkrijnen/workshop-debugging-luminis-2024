@@ -62,6 +62,7 @@ public class Handler implements RequestHandler<SNSEvent, String> {
 
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         PrintStream out = new PrintStream(bout, true, StandardCharsets.UTF_8);
+        out.append("<h1>Team: " + bucketPrefix + "</h1>\n");
         out.append("<table>\n");
         out.append("<tr><th>Station</th><th>Weather Condition</th><th>Temperature last year</th><th></th></tr>\n");
 
