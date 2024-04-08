@@ -1,8 +1,16 @@
 package eu.luminis.debugging.report.model;
 
-import java.util.List;
+import com.google.gson.reflect.TypeToken;
+import eu.luminis.debugging.report.util.Json;
 
-public record WeatherStation(String name, double longitude, double latitude) {
+import java.util.List;
+import java.util.Map;
+
+public record WeatherStation(String name, double longitude, double latitude, String historicTemperatureData) {
+
+    private WeatherStation(String name, double longitude, double latitude) {
+        this(name, longitude, latitude, null);
+    }
 
     public static final List<WeatherStation> stations = List.of(
             new WeatherStation("New York", 40.7128, -74.0060),
@@ -12,4 +20,8 @@ public record WeatherStation(String name, double longitude, double latitude) {
             new WeatherStation("Tokyo", 35.6895, 139.6917)
     );
 
+    public Map<String, Double> getHistoricTemperatures() {
+        return Json.parse(historicTemperatureData, new TypeToken<Map<String, Double>>() {
+        }.getType());
+    }
 }

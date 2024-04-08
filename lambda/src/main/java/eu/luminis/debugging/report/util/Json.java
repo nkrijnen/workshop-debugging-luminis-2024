@@ -7,6 +7,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -16,6 +17,10 @@ public class Json {
 
     public static <T> T parse(String content, Class<T> valueType) {
         return gson.fromJson(content, valueType);
+    }
+
+    public static <T> T parse(String content, Type collectionType) {
+        return gson.fromJson(content, collectionType);
     }
 
     public static String format(Object content) {

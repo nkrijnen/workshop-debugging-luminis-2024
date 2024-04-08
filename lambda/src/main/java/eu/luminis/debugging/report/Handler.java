@@ -64,13 +64,14 @@ public class Handler implements RequestHandler<SNSEvent, String> {
         PrintStream out = new PrintStream(bout, true, StandardCharsets.UTF_8);
         try {
             out.append("<table>\n");
-            out.append("<tr><th>Station</th><th>Weather Condition</th><th></th></tr>\n");
+            out.append("<tr><th>Station</th><th>Weather Condition</th><th>Temperature last year</th><th></th></tr>\n");
 
             ScanResponse scanResponse = dynamoDb.scan(ScanRequest.builder().tableName("debugging-like-a-pro.weather-stations").build());
             List<WeatherStation> weatherStations = scanResponse.items().stream()
-                    .map(dynamoItem -> new WeatherStation(dynamoItem.get("WeatherStation").s(), parseDouble(dynamoItem.get("lat").s()), parseDouble(dynamoItem.get("long").s())))
+                    .map(dynamoItem -> new WeatherStation(dynamoItem.get("WeatherStation").s(), parseDouble(dynamoItem.get("lat").s()), parseDouble(dynamoItem.get("long").s()), dynamoItem.get("historicTemperatureData").s()))
                     .toList();
             for (WeatherStation station : weatherStations) {
+//            for (WeatherStation station : WeatherStation.stations) {
                 var observation = observationEvent.observations().stream().filter(o -> o.station().equals(station.name())).findAny().orElse(null);
 
                 WeatherCondition condition;
@@ -88,6 +89,7 @@ public class Handler implements RequestHandler<SNSEvent, String> {
 
                 out.append("<tr><td>" + observation.station() + "</td>" +
                         "<td>" + condition.getImageEmoji() + "</td>" +
+                        "<td>" + station.getHistoricTemperatures().get("%d-%d-%d".formatted(observationEvent.date().getYear() - 1, observationEvent.date().getMonthValue(), observationEvent.date().getDayOfMonth())) + "</td>" +
                         "<td><a href=\"" + "https://earth.google.com/web/@" + station.latitude() + "," + station.longitude() + "\" target=\"_blank\">show map</a></td></tr>\n");
             }
             out.append("</table>");
