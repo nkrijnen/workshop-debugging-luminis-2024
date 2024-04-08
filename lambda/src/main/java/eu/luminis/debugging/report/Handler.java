@@ -38,7 +38,7 @@ public class Handler implements RequestHandler<SNSEvent, String> {
         if (event.getRecords().isEmpty()) {
             return "Success";
         }
-        var lastRecord = event.getRecords().get(event.getRecords().size());
+        var lastRecord = event.getRecords().get(event.getRecords().size() - 1);
         var message = lastRecord.getSNS().getMessage();
         var observationEvent = Json.parse(message, ObservationEvent.class);
 
