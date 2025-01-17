@@ -1,4 +1,4 @@
-package eu.luminis.debugging.report.util;
+package eu.luminis.observability.report.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

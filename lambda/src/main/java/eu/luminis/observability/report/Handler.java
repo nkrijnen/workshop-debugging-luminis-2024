@@ -1,12 +1,12 @@
-package eu.luminis.debugging.report;
+package eu.luminis.observability.report;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.SNSEvent;
-import eu.luminis.debugging.report.model.ObservationEvent;
-import eu.luminis.debugging.report.model.WeatherCondition;
-import eu.luminis.debugging.report.model.WeatherStation;
-import eu.luminis.debugging.report.util.Json;
+import eu.luminis.observability.report.model.ObservationEvent;
+import eu.luminis.observability.report.model.WeatherCondition;
+import eu.luminis.observability.report.model.WeatherStation;
+import eu.luminis.observability.report.util.Json;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.http.crt.AwsCrtHttpClient;
 import software.amazon.awssdk.regions.Region;
@@ -67,7 +67,7 @@ public class Handler implements RequestHandler<SNSEvent, String> {
         out.append("<table>\n");
         out.append("<tr><th>Station</th><th>Weather Condition</th><th>🌡️</th><th>🌡️ last year</th><th></th></tr>\n");
 
-        ScanResponse scanResponse = dynamoDb.scan(ScanRequest.builder().tableName("debugging-like-a-pro.weather-stations").build());
+        ScanResponse scanResponse = dynamoDb.scan(ScanRequest.builder().tableName("observability-by-design.weather-stations").build());
         List<WeatherStation> weatherStations = scanResponse.items().stream()
                 .map(dynamoItem -> new WeatherStation(dynamoItem.get("WeatherStation").s(), parseDouble(dynamoItem.get("lat").s()), parseDouble(dynamoItem.get("long").s()), dynamoItem.get("historicTemperatureData").s()))
                 .toList();
@@ -105,14 +105,14 @@ public class Handler implements RequestHandler<SNSEvent, String> {
         byte[] bytes = bout.toByteArray();
         String key = bucketPrefix + "/index.html";
         PutObjectRequest request = PutObjectRequest.builder()
-                .bucket("debugging-like-a-pro.weather-reports")
+                .bucket("observability-by-design.weather-reports")
                 .key(key)
                 .cacheControl("no-store")
                 .contentLength((long) bytes.length)
                 .contentType("text/html; charset=utf-8")
                 .build();
         s3.putObject(request, RequestBody.fromBytes(bytes));
-        logger.log("Weather report updated ➡️ http://debugging-like-a-pro.weather-reports.s3-website-eu-west-1.amazonaws.com/" + key);
+        logger.log("Weather report updated ➡️ http://observability-by-design.weather-reports.s3-website-eu-west-1.amazonaws.com/" + key);
 
         return "Success";
     }

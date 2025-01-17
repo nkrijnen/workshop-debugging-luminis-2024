@@ -1,2 +1,2 @@
-rootProject.name = "debugging-like-a-pro"
+rootProject.name = "observability-by-design"
 include("infra", "lambda")

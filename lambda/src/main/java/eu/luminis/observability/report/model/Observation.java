@@ -1,4 +1,4 @@
-package eu.luminis.debugging.report.model;
+package eu.luminis.observability.report.model;
 
 public record Observation(
         String station,

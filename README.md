@@ -1,4 +1,4 @@
-# Debugging like a Pro
+# Observability by Design
 
 ## Setup
 
@@ -36,3 +36,7 @@ Use the `Deploy Lambda` run configuration. Or run:
 Open https://luminis.awsapps.com/start#/ to login to the AWS Console.
 
 Make sure you have access to the `aws-amsterdam-sandbox` account.
+
+## Switch assignments
+
+When you've completed an assignment, you can switch to the next one by increasing `scenario` nr in `LambdaApp`.

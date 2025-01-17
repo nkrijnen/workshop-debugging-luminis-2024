@@ -1,7 +1,7 @@
-package eu.luminis.debugging.report.util;
+package eu.luminis.observability.report.util;
 
-import eu.luminis.debugging.report.model.Observation;
-import eu.luminis.debugging.report.model.ObservationEvent;
+import eu.luminis.observability.report.model.Observation;
+import eu.luminis.observability.report.model.ObservationEvent;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -19,7 +19,6 @@ class JsonTest {
 
     @Test
     void format() {
-
         String json = Json.format(sampleEvent);
 
         assertEquals("{\"observations\":[{\"station\":\"Bla\",\"temperature\":10.0,\"humidity\":50.0}],\"date\":\"2024-04-08T13:54:32\"}", json);

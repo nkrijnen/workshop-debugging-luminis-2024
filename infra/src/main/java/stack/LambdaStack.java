@@ -15,14 +15,14 @@ import software.constructs.Construct;
 import java.util.Map;
 
 public class LambdaStack extends Stack {
-    public LambdaStack(final Construct scope, final String id, final StackProps props, final String userName) {
+    public LambdaStack(final Construct scope, final String id, final StackProps props, final String userName, int scenario) {
         super(scope, id, props);
 
         String jarPath = "../lambda/build/libs/lambda-1.0-SNAPSHOT-all.jar";
-        String handlerClass = "eu.luminis.debugging.report.Handler";
+        String handlerClass = "eu.luminis.observability.report.Handler";
 
-        String topicArn = "arn:aws:sns:eu-west-1:998150297714:debugging-like-a-pro_weather-observations";
-        String roleName = "DebuggingLikeAProLambdaRole";
+        String topicArn = "arn:aws:sns:eu-west-1:998150297714:observability-by-design_weather-observations-scenario-" + scenario;
+        String roleName = "ObservabilityByDesignLambdaRole";
 
         Function weatherStationLambda = new Function(this, "Lambda",
                 FunctionProps.builder()

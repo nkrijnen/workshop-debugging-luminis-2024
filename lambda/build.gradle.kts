@@ -25,7 +25,7 @@ dependencies {
 }
 
 application {
-    mainClass = "eu.luminis.debugging.report.Handler"
+    mainClass = "eu.luminis.observability.report.Handler"
 }
 
 tasks.withType<JavaCompile> {

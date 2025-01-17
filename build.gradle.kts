@@ -1,4 +1,4 @@
-group = "eu.luminis.debugging"
+group = "eu.luminis.observability"
 version = "1.0-SNAPSHOT"
 
 allprojects {

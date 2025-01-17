@@ -1,7 +1,7 @@
-package eu.luminis.debugging.report.model;
+package eu.luminis.observability.report.model;
 
 import com.google.gson.reflect.TypeToken;
-import eu.luminis.debugging.report.util.Json;
+import eu.luminis.observability.report.util.Json;
 
 import java.util.List;
 import java.util.Map;
