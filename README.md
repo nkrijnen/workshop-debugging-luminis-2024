@@ -1,5 +1,7 @@
 # Observability by Design
 
+![weather-station.jpg](weather-station.jpg)
+
 ## Setup
 
 ... cdk, aws-cli, intellij community, jdk 17 (through intellij)
