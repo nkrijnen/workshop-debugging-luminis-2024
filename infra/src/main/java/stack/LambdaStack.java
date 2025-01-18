@@ -18,6 +18,10 @@ public class LambdaStack extends Stack {
     public LambdaStack(final Construct scope, final String id, final StackProps props, final String userName, int scenario) {
         super(scope, id, props);
 
+        if (scenario < 1 || scenario > 8) {
+            throw new IllegalArgumentException("Scenario must be between 1 and 8");
+        }
+
         String jarPath = "../lambda/build/libs/lambda-1.0-SNAPSHOT-all.jar";
         String handlerClass = "eu.luminis.observability.report.Handler";
 
