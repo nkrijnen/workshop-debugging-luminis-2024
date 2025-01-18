@@ -92,7 +92,7 @@ public class Handler implements RequestHandler<SNSEvent, String> {
                 out.append("<tr><td>" + observation.station() + "</td>" +
                         "<td style=\"text-align: center\">" + condition.getImageEmoji() + "</td>" +
                         "<td style=\"text-align: right\">" + "🌡️%5.2f".formatted(observation.temperature()) + "</td>" +
-                        "<td style=\"text-align: right\">" + "🌡️%5.2f".formatted(station.getHistoricTemperatures().get("%d-%02d-%02d".formatted(observationEvent.date().getYear() - 1, observationEvent.date().getMonthValue(), observationEvent.date().getDayOfMonth()))) + "</td>" +
+                        "<td style=\"text-align: right\">" + "🌡️%5.2f".formatted(station.getHistoricTemperatures().get("%d-%02d-%02d".formatted(2023, observationEvent.date().getMonthValue(), observationEvent.date().getDayOfMonth()))) + "</td>" +
                         "<td><a href=\"https://maps.google.com/?q=\"" + station.latitude() + "," + station.longitude() + "\" target=\"_blank\">show map</a></td></tr>\n");
 
             } catch (Exception ignored) {
