@@ -42,3 +42,11 @@ Make sure you have access to the `aws-amsterdam-sandbox` account.
 ## Switch assignments
 
 When you've completed an assignment, you can switch to the next one by increasing `scenario` nr in `LambdaApp`.
+
+## After the workshop
+
+Let's tidy up! Run:
+
+```shell
+./destroy.sh
+```
