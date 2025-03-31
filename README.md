@@ -39,6 +39,12 @@ Open https://luminis.awsapps.com/start#/ to login to the AWS Console.
 
 Make sure you have access to the `aws-amsterdam-sandbox` account.
 
+### Things to do in AWS
+
+You can view the stack that you deployed in [CloudFormation](https://eu-west-1.console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks). Make sure you select the same region that you deployed to (should be Ireland: eu-west-1).
+
+In the cloudformation resources you can find a link to your Lambda and from there you can view and tail logs.
+
 ## Switch assignments
 
 When you've completed an assignment, you can switch to the next one by increasing `scenario` nr in `LambdaApp`.
