@@ -49,6 +49,10 @@ In the cloudformation resources you can find a link to your Lambda and from ther
 
 When you've completed an assignment, you can switch to the next one by increasing `scenario` nr in `LambdaApp`.
 
+## Architecture overview
+
+![architecture.jpg](architecture.jpg)
+
 ## After the workshop
 
 Let's tidy up! Run:
