@@ -63,7 +63,7 @@ public class Handler implements RequestHandler<SNSEvent, String> {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         PrintStream out = new PrintStream(bout, true, StandardCharsets.UTF_8);
         out.append("<h1>Team: " + bucketPrefix + "</h1>\n");
-        out.append("<div style=\"position: fixed; top: 0; right: 0; text-align: right; color: #999; font-size: 80%;\">Last message received:<br/>" + lastRecord.getSNS().getMessageId() + "<br/>" + lastRecord.getSNS().getTimestamp() + "</div>\n");
+        out.append("<div style=\"position: fixed; top: 0; right: 0; text-align: right; color: #999; font-size: 80%;\">Last message received:<br/>" + lastRecord.getSNS().getMessageId() + "<br/>" + lastRecord.getSNS().getTimestamp() + "<br/>" + lastRecord.getSNS().getTopicArn().replaceAll(".*observations-", "") + "</div>\n");
         out.append("<table>\n");
         out.append("<tr><th>Station</th><th>Weather Condition</th><th>🌡️</th><th>🌡️ last year</th><th></th></tr>\n");
 
