@@ -17,6 +17,7 @@ Which should setup a the `AWSAdministratorAccess-998150297714` profile.
 
 ```shell
 aws sso login --profile AWSAdministratorAccess-998150297714
+export AWS_PROFILE=AWSAdministratorAccess-998150297714
 ```
 
 When after a while, you get errors that the token is invalid you may need to run that again in a terminal.
