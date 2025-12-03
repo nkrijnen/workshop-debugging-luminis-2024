@@ -38,7 +38,8 @@ public class LambdaStack extends Stack {
                         .handler(handlerClass)
                         .code(Code.fromAsset(jarPath))
                         .environment(Map.of(
-                                "BUCKET_PREFIX", userName
+                                "BUCKET_PREFIX", userName,
+                                "SCENARIO", Integer.toString(scenario)
                         ))
                         .build());
 
