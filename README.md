@@ -4,7 +4,19 @@
 
 ## Setup
 
-... cdk, aws-cli, intellij community, jdk 17 (through intellij)
+### Mac
+
+Make sure you have [Homebrew](https://brew.sh/) installed.
+
+Then install the latest versions of the AWS CLI and AWS CDK:
+
+```shell
+brew upgrade awscli aws-cdk || brew install awscli aws-cdk
+```
+
+Make sure you have installed the **latest version** of [IntelliJ IDEA Community Edition](https://www.jetbrains.com/idea/download/#section=mac) or Ultimate if you have a license.
+
+Install JDK 17 from inside IntelliJ. You can do this by going to `File -> Project Structure -> Platform Settings -> SDKs` and clicking the `+` button and `Download JDK...` and choose a version 17.
 
 ## AWS Authentication
 
