@@ -5,6 +5,7 @@ import java.util.List;
 
 public record ObservationEvent(
         List<Observation> observations,
-        LocalDateTime date
+        LocalDateTime date,
+        int scenario
 ) {
 }
